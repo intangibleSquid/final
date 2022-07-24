@@ -32,6 +32,31 @@ class MyWindow(Tk):
         self.iconbitmap(icon)
 
 
+# toplevel class
+class NewWindow(Toplevel):
+    """Custom syntax for creating a tkinter Toplevel Window (New Window).
+
+    Expected Arguments:
+        1. Window's Title
+            title: str = 'Root Window'
+        2. Window's Dimensions
+            size: str = '400x400'
+
+    Optional Arguments:
+        3. Window's Icon
+            icon: str = '/path/to/ico/icon.ico'
+
+    Examples:
+        w = NewWindow('My Window", 600x600')
+        w = NewWindow('Root Window', '400x440', 'icon.ico')
+    """
+    def __init__(self, title, size, icon=None):
+        Toplevel.__init__(self)
+        self.title(title)
+        self.geometry(size)
+        self.iconbitmap(icon)
+
+
 # label frame class
 class MyLabelFrame(LabelFrame):
     """Custom syntax for creating a tkinter LabelFrame.
@@ -169,16 +194,19 @@ class MyLabel(Label):
             var: str = tkvar
         img= Label's Static Image
             img: str = '/path/to/img/image.png'
+        font= Label's Font Settings
+            font: str = 'Helvetica 18 bold'
 
     Examples:
         l = MyLabel(main_frame, 'label text', row=1, col=0
         l = MyLabel(main_frame, 'image', row=0, col=0, img='images/img.png')
     """
-    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, var=None, img=None):
+    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, var=None, img=None, font=None):
         Label.__init__(self, parent)
         self['text'] = text
         self['textvariable'] = var
         self['image'] = img
+        self['font'] = font
         self.grid(row=row,
                   column=col,
                   rowspan=rowspan,
@@ -206,16 +234,18 @@ class MyRadio(Radiobutton):
             rowspan: int = 1
         colspan= Radio Button's Grid Columnspan
             colspan: int = 1
+        sticky= Radio Button's Grid Sticky Option
+            sticky: str = N+S+W+E
         var= Radio Button's Control Variable (StringVar or IntVar)
             var: str = tkvar
         val= Radio Button's Control Variable's Value
             val: str | int = 'selection' | 1
 
     Examples:
-        r = MyRadio(main_frame, 'Radio Button', row=2, col=0, var=variable, val=1)
+        r = MyRadio(main_frame, 'Radio Button', row=2, col=0, sticky=W, var=variable, val=1)
         r = MyRadio(main_frame, 'Radio Button', row=2, col=0, var=variable, val=2)
     """
-    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, var=None, val=None):
+    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, sticky=None, var=None, val=None):
         Radiobutton.__init__(self, parent)
         self['text'] = text
         self['variable'] = var
@@ -223,7 +253,8 @@ class MyRadio(Radiobutton):
         self.grid(row=row,
                   column=col,
                   rowspan=rowspan,
-                  columnspan=colspan)
+                  columnspan=colspan,
+                  sticky=sticky)
 
 
 # checkbutton class
