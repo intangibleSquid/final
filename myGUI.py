@@ -241,16 +241,19 @@ class MyRadio(Radiobutton):
             var: str = tkvar
         val= Radio Button's Control Variable's Value
             val: str | int = 'selection' | 1
+        command= Radio Button's Function / Method
+            command: str = refresh
 
     Examples:
         r = MyRadio(main_frame, 'Radio Button', row=2, col=0, sticky=W, var=variable, val=1)
         r = MyRadio(main_frame, 'Radio Button', row=2, col=0, var=variable, val=2)
     """
-    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, sticky=None, var=None, val=None):
+    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, sticky=None, var=None, val=None, command=None):
         Radiobutton.__init__(self, parent)
         self['text'] = text
         self['variable'] = var
         self['value'] = val
+        self['command'] = command
         self.grid(row=row,
                   column=col,
                   rowspan=rowspan,
@@ -283,20 +286,24 @@ class MyCheck(Checkbutton):
             var: str = tkvar
         on= Check Button's Control Variable's 'On' Value
             on: str | int = 'selection' | 1
+        command= Check Button's Function / Method
+            command: str = refresh
 
     Examples:
         c = MyCheck(main_frame, 'Check Button', row=3, col=0, var=variable, on='option1')
         c = MyCheck(main_frame, 'Check Button', row=3, col=0, var=variable, on='option2')
     """
-    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, var=None, on=None):
+    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, sticky=None, var=None, on=None, command=None):
         Checkbutton.__init__(self, parent)
         self['text'] = text
         self['variable'] = var
         self['onvalue'] = on
+        self['command'] = command
         self.grid(row=row,
                   column=col,
                   rowspan=rowspan,
-                  columnspan=colspan)
+                  columnspan=colspan,
+                  sticky=sticky)
 
 '''
 TO DO:
