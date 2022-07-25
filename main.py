@@ -6,7 +6,7 @@ logo and gives the user the option to select between 'Delivery' or 'Carry-Out' f
 """
 # import statements
 from myGUI import *
-from size import pizza_size
+import size
 from PIL import ImageTk, Image
 
 
@@ -36,7 +36,7 @@ def main():
 
     # 'start order' button's function
     def start_order():
-        pizza_size()  # opens the 'pizza_size' window (size.py)
+        size.pizza_size(pickup)  # opens the 'pizza_size' window (size.py) (passes pickup to it)
     start_order = MyButton(nav_frame, "Start Order", row=0, col=0, command=start_order)  # 'start order' button
 
     # 'exit program' button's function

@@ -1,6 +1,7 @@
 """
-Custom tkinter GUI classes
-!!look into window icons (mac specific) and images in tkinter!!
+Custom tkinter GUI classes for easier calls to tkinter widgets from my own programs.
+Integrated tkinter's Grid Geometry manager into most widgets for a one-line widget placement and creation.
+Only used the most frequently called attributes, others can be edited individually in the modules.
 """
 # import modules
 from tkinter import *
@@ -296,3 +297,11 @@ class MyCheck(Checkbutton):
                   column=col,
                   rowspan=rowspan,
                   columnspan=colspan)
+
+'''
+TO DO:
+- [ ] look into window icons (mac specific) [error changing mac window icons]
+- [ ] use logic checking to use window icons across all os / platforms
+- [ ] look into images in tkinter (no PIL / external libraries)
+- [ ] finish tkinter messagebox customizations (if needed)
+'''
