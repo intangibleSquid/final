@@ -81,20 +81,33 @@ class MyLabelFrame(LabelFrame):
             colspan: int = 1
         sticky= LabelFrame's Grid Sticky Option
             sticky: str = N+S+W+E
+        bd= LabelFrame's Border Width (Default = 2)
+            bd: int = 2
+        font= LabelFrame's Font Options
+            font: str | tuple = 'Helvetica 16 bold'
+        padx= LabelFrame's Grid X-Axis Padding
+            padx: int | tuple = (10, 2)
+        pady= LabelFrame's Grid Y-Axis Padding
+            pady: int | tuple = 15
 
     Examples:
         f = MyLabelFrame(root, 'A Frame', row=1, col=0)
         f = MyLabelFrame(root, 'Tall Frame', row=1, col=1, rowspan=3, sticky=W+E)
     """
-    def __init__(self, master, text, *, row, col, rowspan=1, colspan=1, sticky=None):
+    def __init__(self, master, text, *, row, col, rowspan=1, colspan=1, sticky=None, bd=None, font=None, padx=None,
+                 pady=None):
         LabelFrame.__init__(self, master)
         # self.master = master
         self['text'] = text
+        self['bd'] = bd
+        self['font'] = font
         self.grid(row=row,
                   column=col,
                   rowspan=rowspan,
                   columnspan=colspan,
-                  sticky=sticky)
+                  sticky=sticky,
+                  padx=padx,
+                  pady=pady)
 
 
 # frame class
@@ -197,12 +210,14 @@ class MyLabel(Label):
             img: str = '/path/to/img/image.png'
         font= Label's Font Settings
             font: str = 'Helvetica 18 bold'
+        sticky= Label's Sticky Option
+            sticky: str = N+S+W+E
 
     Examples:
         l = MyLabel(main_frame, 'label text', row=1, col=0
         l = MyLabel(main_frame, 'image', row=0, col=0, img='images/img.png')
     """
-    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, var=None, img=None, font=None):
+    def __init__(self, parent, text, *, row, col, rowspan=1, colspan=1, var=None, img=None, font=None, sticky=None):
         Label.__init__(self, parent)
         self['text'] = text
         self['textvariable'] = var
@@ -211,7 +226,8 @@ class MyLabel(Label):
         self.grid(row=row,
                   column=col,
                   rowspan=rowspan,
-                  columnspan=colspan)
+                  columnspan=colspan,
+                  sticky=sticky)
 
 
 # radiobutton class

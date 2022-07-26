@@ -36,8 +36,8 @@ def pizza_base(pickup, p_size):
 
     # 'scratch' label (create pizza from scratch)
     scratch_label = MyLabel(base_window, "Create Pizza from Scratch:", row=2, col=0,
-                            font=('Helvetica', 14, 'bold', 'underline'))
-    scratch_label.grid(sticky=W, pady=(10, 0))
+                            font=('Helvetica', 14, 'bold', 'underline'), sticky=W)
+    scratch_label.grid(pady=(10, 0))
 
     # 'scratch' option (radio button)
     no_base = MyRadio(base_window, 'Start From Scratch', row=3, col=0, sticky=W, var=p_base, val=8)
