@@ -61,7 +61,7 @@ def pizza_base(pickup, p_size):
     # 'next' button function
     def next_pizza():
         base_window.destroy()  # destroy 'base_window' window
-        pizza.customize_pizza(pickup, p_size, p_base)  # opens the 'customize_pizza' window (passes variables to it)
+        pizza.customize_pizza(pickup, p_size, p_base.get())  # opens the 'customize_pizza' window (passes variables to it)
 
     back_btn = MyButton(nav_frame, '<< Back', row=0, col=0, command=back_base)
     exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_base)
