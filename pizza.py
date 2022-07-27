@@ -6,12 +6,13 @@ user to customize their pizza order as well as selecting from a number of pre-ma
 """
 # import statements
 import base
+import extras
 from myGUI import *
 from PIL import ImageTk, Image
 
 
 # define 'customize_pizza' function (to create new 'customize_pizza' window)
-def customize_pizza(pickup, p_size, p_base):
+def customize_pizza(pickup, p_size, p_base, ingredients=None):
     """function to create a new window (pizza customization window)"""
     # create toplevel window
     pizza_window = NewWindow("Create Your Masterpie-zza™", '675x482')
@@ -116,26 +117,29 @@ def customize_pizza(pickup, p_size, p_base):
 
     def generate_ingredients(p_base):
         global your_p_name  # global 'pizza name' variable (for labels outside of function)
-        # build ingredient_list from p_base template selection
-        if p_base < 8:  # customize pizza from template
-            index = p_base  # value from p_base as 'base_pizza' index
-            your_base = base_pizza[index]  # key-value pair from template dictionary
-            your_p_name = your_base[0]  # pizza base template's name
-            your_pizza = your_base[1]  # pizza base template's ingredients
-        else:  # customize pizza from scratch
-            your_p_name = 'No Base (From Scratch)'  # custom pizza's name (no base / from scratch)
-            your_pizza = ((crusts, 0), (sauces, 0))  # custom pizza's ingredients (crust and sauce only)
-        ingredient_list = []  # initialize list of ingredients for check / radio buttons & pizza_image
-        for item in your_pizza:  # iterate through ingredients for formatting
-            dictionary = item[0]  # dictionary name for ingredient (sauces, crusts, etc.)
-            dict_key = item[1]  # dictionary index for ingredients (to pass to specific dictionary)
-            if type(dict_key) is tuple:  # more than one type of ingredient? (many meats, many toppings, etc.)
-                key_index = 0  # ingredient dictionary index
-                for key in dict_key:  # iterate through ingredient dictionary keys
-                    ingredient_list.append(dictionary[int(dict_key[key_index])])  # add ingredients to ingredient_list
-                    key_index += 1  # increment dictionary index key
-            else:  # only one ingredient of dictionary type?
-                ingredient_list.append(dictionary[int(dict_key)])  # add ingredient to ingredient_list
+        if ingredients is None:
+            # build ingredient_list from p_base template selection
+            if p_base < 8:  # customize pizza from template
+                index = p_base  # value from p_base as 'base_pizza' index
+                your_base = base_pizza[index]  # key-value pair from template dictionary
+                your_p_name = your_base[0]  # pizza base template's name
+                your_pizza = your_base[1]  # pizza base template's ingredients
+            else:  # customize pizza from scratch
+                your_p_name = 'No Base (From Scratch)'  # custom pizza's name (no base / from scratch)
+                your_pizza = ((crusts, 0), (sauces, 0))  # custom pizza's ingredients (crust and sauce only)
+            ingredient_list = []  # initialize list of ingredients for check / radio buttons & pizza_image
+            for item in your_pizza:  # iterate through ingredients for formatting
+                dictionary = item[0]  # dictionary name for ingredient (sauces, crusts, etc.)
+                dict_key = item[1]  # dictionary index for ingredients (to pass to specific dictionary)
+                if type(dict_key) is tuple:  # more than one type of ingredient? (many meats, many toppings, etc.)
+                    key_index = 0  # ingredient dictionary index
+                    for key in dict_key:  # iterate through ingredient dictionary keys
+                        ingredient_list.append(dictionary[int(dict_key[key_index])])  # add ingredients to ingredient_list
+                        key_index += 1  # increment dictionary index key
+                else:  # only one ingredient of dictionary type?
+                    ingredient_list.append(dictionary[int(dict_key)])  # add ingredient to ingredient_list
+        else:
+             ingredient_list = ingredients
         return ingredient_list
 
     # convert p_base from previous window to ingredient list
@@ -213,8 +217,6 @@ def customize_pizza(pickup, p_size, p_base):
     pizza_img_frame['relief'] = GROOVE  # pizza_image frame (above) and 'groove' relief style
     pizza_img_label = MyLabel(pizza_img_frame, '', row=0, col=0,
                               img=pizza_image)  # pizza_image (displayed with a label)
-
-    pizza_img_label.focus_force()
 
     def update_seasoning(value):  # seasoning only
         global pizza_image
@@ -399,19 +401,20 @@ def customize_pizza(pickup, p_size, p_base):
     # 'exit' button function
     def exit_pizza():
         p_size.set(0)  # reset 'size' variable (avoid weird behavior)
-        p_base = 0  # reset 'base' variable (avoid weird behavior)
+        p_base = IntVar()  # resent p_base as a tkinter variable (instead of an integer, so it can be reset below)
+        p_base.set(0)  # reset 'base' variable (avoid weird behavior)
         pizza_window.destroy()  # destroy 'base_window' window
 
     # 'next' button function
-    def next_payment():
+    def next_extras():
         pizza_window.destroy()  # destroy 'base_window' window
-        # pizza.customize_pizza(pickup, p_size, p_base)  # opens the 'customize_pizza' window (passes variables to it)
+        extras.add_extras(pickup, p_size, p_base, ingredients)  # passes variables to the next module (to add extras)
 
     # program navigation
     nav_frame = MyFrame(pizza_window, row=5, col=0, colspan=4, sticky=N+S)
     back_btn = MyButton(nav_frame, '<< Back', row=0, col=0, command=back_pizza)
     exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_pizza)
-    next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_payment)
+    next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_extras)
 
     # pass on all variables
 
