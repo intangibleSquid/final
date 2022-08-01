@@ -17,7 +17,7 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
 
     # create new toplevel tkinter window
     global payment_window  # make 'payment_window' object global
-    payment_window = NewWindow("Review Your Order", '1200x680')  # create the 'review order' window
+    payment_window = NewWindow("Review Your Order", '1000x480')  # create the 'review order' window
 
     # define a function to process input variables ('in' prefix for 'incoming')
     def process_input(in_pickup, in_p_size, in_p_base, in_your_pizza, in_custom, in_changes, in_extra):
@@ -631,7 +631,8 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
             return extra_item_lists  # return list of extra_item lists
 
         # determine info about extra_item selections
-        your_extras = extra_item_info()
+        global your_extras  # make 'your_extras' list global
+        your_extras = extra_item_info()  # create 'your_extras' list (from the function above)
 
         # define function to determine height of extra_item textareas
         def determine_text_height(extra_selection_lists):
@@ -693,6 +694,7 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
         def populate_extra_total_frame_text(extra_items_lists):
             """Populates 'extra_total_frame' section's Textareas with items and prices"""
             # create lists and dictionaries for extra_item pricing and labeling
+            global extra_prices  # make extra prices dictionary global
             extra_prices = {'Breadsticks': 4.95, 'Garlic Bread': 4.95,
                             'Cheese': 0.99, 'Garlic Butter': 0.99, 'Marinara': 0.99, 'Ranch': 0.99,
                             'Cinnastix™': 4.95, 'Brownies': 3.65, 'Cookies': 2.95, 'Choc Cookies': 2.95,
@@ -794,201 +796,210 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
     # generate extra_item total receipt
     generate_extra_total_receipt()
 
+    # define function to generate and display the receipt for your order total
+    def generate_order_total_receipt():
+        """Generate and display the receipt for your order total"""
+
+        # create 'order_total_frame' label frame to hold your order total receipt
+        global order_total_frame  # make order_total_frame global
+        order_total_frame = MyLabelFrame(payment_window, 'Order Total', row=1, col=4, font='Helvetica 16 bold',
+                                         sticky=N)  # create 'order_total_frame'
+        order_total_frame.grid(padx=(12, 0))  # add some padding to 'order_total_frame' (12px left)
+
+        # create order total receipt sections
+        # 'pizza price' section
+        total_pizza_label = MyLabel(order_total_frame, 'Pizza Price', row=0, col=0, font='Helvetica 12 bold', sticky=W)
+        total_pizza_cost_label = MyLabel(order_total_frame, 'Price', row=0, col=1, font='Helvetica 12', sticky=W)
+        total_pizza_text = MyText(order_total_frame, height=1, width=25, row=1, col=0, state=DISABLED)
+        total_pizza_cost_text = MyText(order_total_frame, height=1, width=7, row=1, col=1, state=DISABLED)
+        # 'extras price' section
+        total_extras_label = MyLabel(order_total_frame, 'Extra Items Price', row=2, col=0, font='Helvetica 12 bold',
+                                     sticky=W)
+        total_extras_cost_label = MyLabel(order_total_frame, '(+)', row=2, col=1, font='Helvetica 10 bold')
+        total_sides_text = MyText(order_total_frame, height=1, width=25, row=3, col=0, state=DISABLED)
+        total_sides_cost_text = MyText(order_total_frame, height=1, width=7, row=3, col=1, state=DISABLED)
+        total_dipping_text = MyText(order_total_frame, height=1, width=25, row=4, col=0, state=DISABLED)
+        total_dipping_cost_text = MyText(order_total_frame, height=1, width=7, row=4, col=1, state=DISABLED)
+        total_dessert_text = MyText(order_total_frame, height=1, width=25, row=5, col=0, state=DISABLED)
+        total_dessert_cost_text = MyText(order_total_frame, height=1, width=7, row=5, col=1, state=DISABLED)
+        total_drink_text = MyText(order_total_frame, height=1, width=25, row=6, col=0, state=DISABLED)
+        total_drink_cost_text = MyText(order_total_frame, height=1, width=7, row=6, col=1, state=DISABLED)
+        # 'total order price' section
+        order_total_label = MyLabel(order_total_frame, 'Order Total', row=7, col=0, font='Helvetica 12 bold', sticky=W)
+        order_total_label.grid(pady=(5, 0))
+        order_total_cost_label = MyLabel(order_total_frame, 'Price', row=7, col=1, font='Helvetica 12', sticky=W)
+        order_total_cost_label.grid(pady=(5, 0))
+        extras_total_text = MyText(order_total_frame, height=1, width=25, row=8, col=0, state=DISABLED)
+        extras_total_cost_text = MyText(order_total_frame, height=1, width=7, row=8, col=1, state=DISABLED)
+        sub_total_text = MyText(order_total_frame, height=1, width=25, row=9, col=0, state=DISABLED)
+        sub_total_cost_text = MyText(order_total_frame, height=1, width=7, row=9, col=1, state=DISABLED)
+        taxes_text = MyText(order_total_frame, height=1, width=25, row=10, col=0, state=DISABLED)
+        taxes_cost_text = MyText(order_total_frame, height=1, width=7, row=10, col=1, state=DISABLED)
+        order_total_text = MyText(order_total_frame, height=1, width=25, row=11, col=0, state=DISABLED)
+        order_total_cost_text = MyText(order_total_frame, height=1, width=7, row=11, col=1, state=DISABLED)
+
+        # define a function to populate 'order total' textareas
+        def populate_order_total_frame_text(extra_selections):
+            """Populates 'order_total_frame' section's Textareas with items and prices"""
+            # populate 'order_total_frame' section's textareas
+            # 'total order price' section
+            # populate 'pizza price' textareas
+            # total pizza text
+            total_pizza_text['state'] = NORMAL  # set 'total_pizza_text' state to normal
+            if custom_value is True:  # pizza has been customized
+                total_pizza_text.insert(0.0, 'Your Masterpie-zza™')  # insert total pizza text
+            else:  # pizza hasn't been customized
+                total_pizza_text.insert(0.0, 'Your Pizza')  # insert total pizza text
+            total_pizza_text['state'] = DISABLED  # set 'total_pizza_text' state to disabled
+            # total pizza cost text
+            total_pizza_cost_text['state'] = NORMAL  # set 'total_pizza_cost_text' state to normal
+            total_pizza_cost_text.insert(0.0, '$%0.2f' % pizza_price)  # insert total pizza cost text
+            total_pizza_cost_text['state'] = DISABLED  # set 'total_pizza_cost_text' state to disabled
+
+            # 'extras prices' section
+            # populate 'sides' textareas
+            # total sides section
+            total_sides_text['state'] = NORMAL  # set 'total_sides_text' state to normal
+            sides_selection = extra_selections[0]  # pull 'sides_selection' from extra_selections
+            if not sides_selection:  # no sides selected
+                total_sides_text.insert(0.0, 'No Side Items')  # insert total sides text
+            else:  # sides selected
+                total_sides = len(sides_selection)  # determine how many sides were selected
+                total_sides_text.insert(0.0, f'{total_sides} Side Items')  # insert total sides text
+            total_sides_text['state'] = DISABLED  # set 'total_sides_text' state to disabled
+            # total sides cost text
+            total_sides_cost_text['state'] = NORMAL  # set 'total_sides_cost_text' state to normal
+            total_sides_cost = 0.00  # initialize total_sides_cost variable
+            if not sides_selection:  # no sides selected
+                total_sides_cost_text.insert(0.0, '$0.00')  # insert total slides cost text
+            else:  # sides selected
+                for side_selection in sides_selection:  # iterate through selected sides
+                    side_selection_price = extra_prices[side_selection]  # get selected side's price
+                    total_sides_cost += side_selection_price  # accumulate total_sides_cost with each side_price
+                total_sides_cost_text.insert(0.0, '$%0.2f' % total_sides_cost)  # insert side cost text
+            total_sides_cost_text['state'] = DISABLED  # set 'total_sides_cost_text' state to disabled
+            # populate 'dipping' textareas
+            # total dipping section
+            total_dipping_text['state'] = NORMAL  # set 'total_dipping_text' state to normal
+            dipping_selection = extra_selections[1]  # pull 'dipping_selection' from extra_selections
+            if not dipping_selection:  # no sauces selected
+                total_dipping_text.insert(0.0, 'No Dipping Sauces')  # insert total dipping text
+            else:  # sauces selected
+                total_dipping = len(dipping_selection)  # determine how many sauces were selected
+                total_dipping_text.insert(0.0, f'{total_dipping} Dipping Sauces')  # insert total dipping text
+            total_dipping_text['state'] = DISABLED  # set 'total_dipping_text' state to disabled
+            # total dipping cost text
+            total_dipping_cost_text['state'] = NORMAL  # set 'total_sides_cost_text' state to normal
+            total_dipping_cost = 0.00  # initialize total_dipping_cost variable
+            if not dipping_selection:  # no sauces selected
+                total_dipping_cost_text.insert(0.0, '$0.00')  # insert total slides cost text
+            else:  # sides selected
+                for sauce_selection in dipping_selection:  # iterate through selected sauces
+                    dipping_selection_price = extra_prices[sauce_selection]  # get selected sauces's price
+                    total_dipping_cost += dipping_selection_price  # accumulate total_dipping_cost with each sauce_price
+                total_dipping_cost_text.insert(0.0, '$%0.2f' % total_dipping_cost)  # insert dipping cost text
+            total_dipping_cost_text['state'] = DISABLED  # set 'total_dipping_cost_text' state to disabled
+            # populate 'dessert' textareas
+            # total dessert section
+            total_dessert_text['state'] = NORMAL  # set 'total_dessert_text' state to normal
+            dessert_selection = extra_selections[2]  # pull 'dessert_selection' from extra_selections
+            if not dessert_selection:  # no dessert selected
+                total_dessert_text.insert(0.0, 'No Dessert Items')  # insert total dessert text
+            else:  # desserts selected
+                total_dessert = len(dessert_selection)  # determine how many desserts were selected
+                total_dessert_text.insert(0.0, f'{total_dessert} Dessert Items')  # insert total dessert text
+            total_dessert_text['state'] = DISABLED  # set 'total_dessert_text' state to disabled
+            # total dessert cost text
+            total_dessert_cost_text['state'] = NORMAL  # set 'total_dessert_cost_text' state to normal
+            total_dessert_cost = 0.00  # initialize total_dessert_cost variable
+            if not dessert_selection:  # no dessert selected
+                total_dessert_cost_text.insert(0.0, '$0.00')  # insert total dessert cost text
+            else:  # desserts selected
+                for dessert_selected in dessert_selection:  # iterate through selected desserts
+                    dessert_selection_price = extra_prices[dessert_selected]  # get selected desserts's price
+                    total_dessert_cost += dessert_selection_price  # accumulate total_dessert_cost with each dess_price
+                total_dessert_cost_text.insert(0.0, '$%0.2f' % total_dessert_cost)  # insert dessert cost text
+            total_dessert_cost_text['state'] = DISABLED  # set 'total_dessert_cost_text' state to disabled
+            # populate 'drink' textareas
+            # total drinks section
+            total_drink_text['state'] = NORMAL  # set 'total_drink_text' state to normal
+            drink_selection = extra_selections[3]  # pull 'drink_selection' from extra_selections
+            if not drink_selection:  # no drink selected
+                total_drink_text.insert(0.0, 'No 2-Liter Sodas')  # insert total drink text
+            else:  # drinks selected
+                total_drinks = len(drink_selection)  # determine how many drinks were selected
+                total_drink_text.insert(0.0, f'{total_drinks} 2-Liter Sodas')  # insert total drink text
+            total_drink_text['state'] = DISABLED  # set 'total_drink_text' state to disabled
+            # total drink cost text
+            total_drink_cost_text['state'] = NORMAL  # set 'total_drink_cost_text' state to normal
+            total_drink_cost = 0.00  # initialize total_drink_cost variable
+            if not drink_selection:  # no drinks selected
+                total_drink_cost_text.insert(0.0, '$0.00')  # insert total drink cost text
+            else:  # drinks selected
+                for drink_selected in drink_selection:  # iterate through selected drinks
+                    drink_selection_price = extra_prices[drink_selected]  # get selected drinks's price
+                    total_drink_cost += drink_selection_price  # accumulate total_drink_cost with each dess_price
+                total_drink_cost_text.insert(0.0, '$%0.2f' % total_drink_cost)  # insert drink cost text
+            total_drink_cost_text['state'] = DISABLED  # set 'total_drink_cost_text' state to disabled
+
+            # populate the 'total order price' section's textareas
+            # 'extras total' section
+            # extra total text
+            extras_total_text['state'] = NORMAL  # set 'extras_total_text' state to normal
+            extras_total_text.insert(0.0, 'Extra Items Total')  # insert extras total text
+            extras_total_text['state'] = DISABLED  # set 'extras_total_text' state to disabled
+            # extra total cost text
+            extras_total_cost_text['state'] = NORMAL  # set 'extras_total_cost_text' state to normal
+            if not extra_list:  # no extra items selected
+                extras_total_cost_text.insert(0.0, '$0.00')  # insert extra total cost text
+                extras_final = 0.00  # initialize 'extras_final' accumulator variable
+            else:  # extra items selected
+                extras_total = total_sides_cost + total_dipping_cost + total_dessert_cost + total_drink_cost  # add ext
+                extras_final = round(extras_total, 2)  # round the sum of all the extra_item categories
+                extras_total_cost_text.insert(0.0, '$%0.2f' % extras_final)  # insert extra cost text
+            extras_total_cost_text['state'] = DISABLED  # set 'extras_total_cost_text' state to disabled
+            # 'order subtotal' section
+            # sub total text
+            sub_total_text['state'] = NORMAL  # set 'sub_total_text' state to normal
+            sub_total_text.insert(0.0, 'Order Subtotal')  # insert sub total text
+            sub_total_text['state'] = DISABLED  # set 'sub_total_text' state to disabled
+            # sub total cost text
+            sub_total_cost_text['state'] = NORMAL  # set 'sub_total_cost_text' state to normal
+            sub_total = pizza_price + extras_final  # add the extras price to the pizza price
+            sub_final = round(sub_total, 2)  # round the subtotal cost
+            sub_total_cost_text.insert(0.0, '$%0.2f' % sub_final)  # insert sub total cost text
+            sub_total_cost_text['state'] = DISABLED  # set 'sub_total_cost_text' state to disabled
+            # 'taxes' section
+            # taxes text
+            taxes_text['state'] = NORMAL  # set 'taxes_text' state to normal
+            taxes_text.insert(0.0, 'Sales Tax (8%)')  # insert tax text
+            taxes_text['state'] = DISABLED  # set 'taxes_text' state to disabled
+            # taxes cost text
+            taxes_cost_text['state'] = NORMAL  # set 'taxes_cost_text' state to normal
+            SALES_TAX = 0.08  # sales tax constant
+            taxes = sub_final * SALES_TAX  # calculate sales tax cost
+            taxes_final = round(taxes, 2)  # round sales tax cost
+            taxes_cost_text.insert(0.0, '$%0.2f' % taxes_final)  # insert sales tax cost
+            taxes_cost_text['state'] = DISABLED  # set 'taxes_cost_text' state to disabled
+            # 'order total' section
+            # order total text
+            order_total_text['state'] = NORMAL  # set 'order_total_text' state to normal
+            order_total_text.insert(0.0, 'Order Total')  # insert order total text
+            order_total_text['state'] = DISABLED  # set 'order_total_text' state to disabled
+            # order total cost text
+            order_total_cost_text['state'] = NORMAL  # set 'order_total_cost_text' state to normal
+            order_total = sub_final + taxes_final  # calculate the order total cost
+            order_final = round(order_total, 2)  # round the order total cost
+            order_total_cost_text.insert(0.0, '$%0.2f' % order_final)  # insert order total cost text
+            order_total_cost_text['state'] = DISABLED  # set 'order_total_cost_text' state to disabled
+
+        # populate 'order_total_frame' textareas (with the function defined above)
+        populate_order_total_frame_text(your_extras)
+
+    # generate order total receipt
+    generate_order_total_receipt()
+
 '''
-
-    # total order price section
-    order_total_frame = MyLabelFrame(payment_window, 'Order Total', row=1, col=4, font='Helvetica 16 bold', sticky=N)
-    order_total_frame.grid(padx=(12, 0))
-    # pizza price
-    total_pizza_label = MyLabel(order_total_frame, 'Pizza Price', row=0, col=0, font='Helvetica 12 bold', sticky=W)
-    total_pizza_cost_label = MyLabel(order_total_frame, 'Price', row=0, col=1, font='Helvetica 12', sticky=W)
-    total_pizza_text = MyText(order_total_frame, height=1, width=25, row=1, col=0, state=DISABLED)
-    total_pizza_cost_text = MyText(order_total_frame, height=1, width=7, row=1, col=1, state=DISABLED)
-
-    # extras price
-    total_extras_label = MyLabel(order_total_frame, 'Extra Items Price', row=2, col=0, font='Helvetica 12 bold',
-                                 sticky=W)
-    total_extras_cost_label = MyLabel(order_total_frame, '(+)', row=2, col=1, font='Helvetica 10 bold')
-    total_sides_text = MyText(order_total_frame, height=1, width=25, row=3, col=0, state=DISABLED)
-    total_sides_cost_text = MyText(order_total_frame, height=1, width=7, row=3, col=1, state=DISABLED)
-    total_dipping_text = MyText(order_total_frame, height=1, width=25, row=4, col=0, state=DISABLED)
-    total_dipping_cost_text = MyText(order_total_frame, height=1, width=7, row=4, col=1, state=DISABLED)
-    total_dessert_text = MyText(order_total_frame, height=1, width=25, row=5, col=0, state=DISABLED)
-    total_dessert_cost_text = MyText(order_total_frame, height=1, width=7, row=5, col=1, state=DISABLED)
-    total_drink_text = MyText(order_total_frame, height=1, width=25, row=6, col=0, state=DISABLED)
-    total_drink_cost_text = MyText(order_total_frame, height=1, width=7, row=6, col=1, state=DISABLED)
-
-    # populate total order price textareas
-    # pizza price
-    if total_pizza_text['state'] == DISABLED:
-        total_pizza_text['state'] = NORMAL
-        if custom is True:
-            total_pizza_text.insert(0.0, 'Your Masterpie-zza™')
-        else:
-            total_pizza_text.insert(0.0, 'Your Pizza')
-        total_pizza_text['state'] = DISABLED
-    if total_pizza_cost_text['state'] == DISABLED:
-        total_pizza_cost_text['state'] = NORMAL
-        total_pizza_cost_text.insert(0.0, '$%0.2f' % pizza_price)
-        total_pizza_cost_text['state'] = DISABLED
-
-    # extras prices
-    # sides
-    if total_sides_text['state'] == DISABLED:
-        total_sides_text['state'] = NORMAL
-        if not your_sides:
-            total_sides_text.insert(0.0, 'No Side Items')
-        else:
-            total_sides = len(your_sides)
-            total_sides_text.insert(0.0, f'{total_sides} Side Items')
-        total_sides_text['state'] = DISABLED
-    if total_sides_cost_text['state'] == DISABLED:
-        total_sides_cost_text['state'] = NORMAL
-        total_sides_cost = 0.00
-        if not your_sides:
-            total_sides_cost_text.insert(0.0, '$0.00')
-        else:
-            for item in your_sides:
-                item_price = extras[item]
-                total_sides_cost += item_price
-            total_sides_cost_text.insert(0.0, '$%0.2f' % total_sides_cost)
-        total_sides_cost_text['state'] = DISABLED
-
-    # dipping sauces
-    if total_dipping_text['state'] == DISABLED:
-        total_dipping_text['state'] = NORMAL
-        if not your_sauces:
-            total_dipping_text.insert(0.0, 'No Dipping Sauces')
-        else:
-            total_dipping = len(your_sauces)
-            total_dipping_text.insert(0.0, f'{total_dipping} Dipping Sauces')
-        total_dipping_text['state'] = DISABLED
-    if total_dipping_cost_text['state'] == DISABLED:
-        total_dipping_cost_text['state'] = NORMAL
-        total_dipping_cost = 0.00
-        if not your_sauces:
-            total_dipping_cost_text.insert(0.0, '$0.00')
-        else:
-            for item in your_sauces:
-                item_price = extras[item]
-                total_dipping_cost += item_price
-            total_dipping_cost_text.insert(0.0, '$%0.2f' % total_dipping_cost)
-        total_dipping_cost_text['state'] = DISABLED
-
-    # desserts
-    if total_dessert_text['state'] == DISABLED:
-        total_dessert_text['state'] = NORMAL
-        if not your_desserts:
-            total_dessert_text.insert(0.0, 'No Dessert Items')
-        else:
-            total_dessert = len(your_desserts)
-            total_dessert_text.insert(0.0, f'{total_dessert} Dessert Items')
-        total_dessert_text['state'] = DISABLED
-    if total_dessert_cost_text['state'] == DISABLED:
-        total_dessert_cost_text['state'] = NORMAL
-        total_dessert_cost = 0.00
-        if not your_desserts:
-            total_dessert_cost_text.insert(0.0, '$0.00')
-        else:
-            for item in your_desserts:
-                item_price = extras[item]
-                total_dessert_cost += item_price
-            total_dessert_cost_text.insert(0.0, '$%0.2f' % total_dessert_cost)
-        total_dessert_cost_text['state'] = DISABLED
-
-    # drinks
-    if total_drink_text['state'] == DISABLED:
-        total_drink_text['state'] = NORMAL
-        if not your_drinks:
-            total_drink_text.insert(0.0, 'No 2-Liter Sodas')
-        else:
-            total_drink = len(your_drinks)
-            total_drink_text.insert(0.0, f'{total_drink} 2-Liter Sodas')
-        total_drink_text['state'] = DISABLED
-    if total_drink_cost_text['state'] == DISABLED:
-        total_drink_cost_text['state'] = NORMAL
-        total_drink_cost = 0.00
-        if not your_drinks:
-            total_drink_cost_text.insert(0.0, '$0.00')
-        else:
-            for item in your_drinks:
-                item_price = extras[item]
-                total_drink_cost += item_price
-            total_drink_cost_text.insert(0.0, '$%0.2f' % total_drink_cost)
-        total_drink_cost_text['state'] = DISABLED
-
-    # total order price section
-    order_total_label = MyLabel(order_total_frame, 'Order Total', row=7, col=0, font='Helvetica 12 bold', sticky=W)
-    order_total_label.grid(pady=(5, 0))
-    order_total_cost_label = MyLabel(order_total_frame, 'Price', row=7, col=1, font='Helvetica 12', sticky=W)
-    order_total_cost_label.grid(pady=(5, 0))
-    extras_total_text = MyText(order_total_frame, height=1, width=25, row=8, col=0, state=DISABLED)
-    extras_total_cost_text = MyText(order_total_frame, height=1, width=7, row=8, col=1, state=DISABLED)
-    sub_total_text = MyText(order_total_frame, height=1, width=25, row=9, col=0, state=DISABLED)
-    sub_total_cost_text = MyText(order_total_frame, height=1, width=7, row=9, col=1, state=DISABLED)
-    taxes_text = MyText(order_total_frame, height=1, width=25, row=10, col=0, state=DISABLED)
-    taxes_cost_text = MyText(order_total_frame, height=1, width=7, row=10, col=1, state=DISABLED)
-    order_total_text = MyText(order_total_frame, height=1, width=25, row=11, col=0, state=DISABLED)
-    order_total_cost_text = MyText(order_total_frame, height=1, width=7, row=11, col=1, state=DISABLED)
-
-    # populate the total order price textareas
-    # extras total
-    if extras_total_text['state'] == DISABLED:
-        extras_total_text['state'] = NORMAL
-        extras_total_text.insert(0.0, 'Extra Items Total')
-        extras_total_text['state'] = DISABLED
-    if extras_total_cost_text['state'] == DISABLED:
-        extras_total_cost_text['state'] = NORMAL
-        if not extra:
-            extras_total_cost_text.insert(0.0, '$0.00')
-            extras_final = 0.00
-        else:
-            extras_total = total_sides_cost + total_dipping_cost + total_dessert_cost + total_drink_cost
-            extras_final = round(extras_total, 2)
-            extras_total_cost_text.insert(0.0, '$%0.2f' % extras_final)
-        extras_total_cost_text['state'] = DISABLED
-
-    # order subtotal
-    if sub_total_text['state'] == DISABLED:
-        sub_total_text['state'] = NORMAL
-        sub_total_text.insert(0.0, 'Order Subtotal')
-        sub_total_text['state'] = DISABLED
-    if sub_total_cost_text['state'] == DISABLED:
-        sub_total_cost_text['state'] = NORMAL
-        sub_total = pizza_price + extras_final
-        sub_final = round(sub_total, 2)
-        sub_total_cost_text.insert(0.0, '$%0.2f' % sub_final)
-        sub_total_cost_text['state'] = DISABLED
-
-    # taxes
-    if taxes_text['state'] == DISABLED:
-        taxes_text['state'] = NORMAL
-        taxes_text.insert(0.0, 'Sales Tax (8%)')
-        taxes_text['state'] = DISABLED
-    if taxes_cost_text['state'] == DISABLED:
-        taxes_cost_text['state'] = NORMAL
-        SALES_TAX = 0.08
-        taxes = sub_final * SALES_TAX
-        taxes_final = round(taxes, 2)
-        taxes_cost_text.insert(0.0, '$%0.2f' % taxes_final)
-        taxes_cost_text['state'] = DISABLED
-
-    # order total
-    if order_total_text['state'] == DISABLED:
-        order_total_text['state'] = NORMAL
-        order_total_text.insert(0.0, 'Order Total')
-        order_total_text['state'] = DISABLED
-    if order_total_cost_text['state'] == DISABLED:
-        order_total_cost_text['state'] = NORMAL
-        order_total = sub_final + taxes_final
-        order_final = round(order_total, 2)
-        order_total_cost_text.insert(0.0, '$%0.2f' % order_final)
-        order_total_cost_text['state'] = DISABLED
-
-
-
-
-
     # navigation functions
     # 'back' button function
     def back_payment():
