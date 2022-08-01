@@ -90,9 +90,13 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
                                             (meats, (4, 3)), (seasonings, 3)))}
 
     # initialize check / radio button control variables
+    global custom  # track if pizza has been changed from p_base template
+    global changes  # track changed meats, toppings, and seasonings (for payment.py)
     global crust  # global crust variable
     global sauce  # global sauce variable
     global pizza_image  # global pizza_image variable
+    custom = False  # default state (pizza hasn't been changed from template)
+    changes = {'meats': 0, 'toppings': 0, 'seasonings': 0}  # track count of added or removed items (for payment)
     crust = IntVar()  # crust variable (radio button)
     sauce = IntVar()  # sauce variable (radio button)
     cheese = IntVar()  # cheese variable (check button)
@@ -220,13 +224,16 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
 
     def update_seasoning(value):  # seasoning only
         global pizza_image
+        global custom
         # update ingredients_list
         item = seasonings[value]
         # check if topping already exists (logic is reversed because value updates when clicked)
         if seasoning[value - 1].get() == 0:
             item = seasonings[value]
             ingredients.remove(item)  # remove meat from ingredients
+            changes['seasonings'] -= 1
         else:
+            changes['seasonings'] += 1
             if value < 2:
                 ingredients.insert(3, item)  # add new meat to ingredients
             else:
@@ -236,16 +243,20 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
         # create new pizza_image from update image_list
         pizza_image = create_image(image_list)
         pizza_img_label = MyLabel(pizza_img_frame, '', row=0, col=0, img=pizza_image)  # updated pizza_image
+        custom = True
 
     def update_topping(value):  # toppings only
         global pizza_image
+        global custom
         # update ingredients_list
         item = toppings[value]
         # check if topping already exists (logic is reversed because value updates when clicked)
         if topping[value - 1].get() == 0:
             item = toppings[value]
             ingredients.remove(item)  # remove meat from ingredients
+            changes['toppings'] -= 1
         else:
+            changes['toppings'] += 1
             if value > 2:
                 ingredients.append(item)  # add new meat to ingredients
             else:
@@ -255,17 +266,20 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
         # create new pizza_image from update image_list
         pizza_image = create_image(image_list)
         pizza_img_label = MyLabel(pizza_img_frame, '', row=0, col=0, img=pizza_image)  # updated pizza_image
-
+        custom = True
 
     def update_meat(value):  # meats only
         global pizza_image
+        global custom
         # update ingredients_list
         item = meats[value]
         # check if meat already exists (logic is reversed because value updates when clicked)
         if meat[value - 1].get() == 0:
             item = meats[value]
             ingredients.remove(item)  # remove meat from ingredients
+            changes['meats'] -= 1
         else:
+            changes['meats'] += 1
             if value > 1:
                 ingredients.append(item)  # add new meat to ingredients
             else:
@@ -275,6 +289,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
         # create new pizza_image from update image_list
         pizza_image = create_image(image_list)
         pizza_img_label = MyLabel(pizza_img_frame, '', row=0, col=0, img=pizza_image)  # updated pizza_image
+        custom = True
 
     def update_cheese(value):  # cheese only
         global pizza_image
@@ -408,7 +423,10 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
     # 'next' button function
     def next_extras():
         pizza_window.destroy()  # destroy 'base_window' window
-        extras.add_extras(pickup, p_size, p_base, ingredients)  # passes variables to the next module (to add extras)
+        if custom is True:
+            extras.add_extras(pickup, p_size, p_base, ingredients, custom, changes)  # passes variables to the next module (to add extras)
+        else:
+            extras.add_extras(pickup, p_size, p_base, ingredients)  # passes variables to the next module (to add extras)
 
     # program navigation
     nav_frame = MyFrame(pizza_window, row=5, col=0, colspan=4, sticky=N+S)

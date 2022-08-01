@@ -6,17 +6,18 @@ user to add side items, desserts and drinks to their order and sends them to the
 """
 # import statements
 import pizza
+import payment
 from myGUI import *
 from PIL import ImageTk, Image
 from tkinter import messagebox as mb
 
 
 # define 'customize_pizza' function (to create new 'customize_pizza' window)
-def add_extras(pickup, p_size, p_base, your_pizza):
+def add_extras(pickup, p_size, p_base, your_pizza, custom=False, changes=None):
     extras_window = NewWindow("Sides, Desserts, and Drinks", '490x135')
 
     items = ['Breadsticks', 'Garlic Bread',
-             'Cheesy Jalapeno', 'Garlic Butter', 'Marinara', 'Ranch',
+             'Cheese', 'Garlic Butter', 'Marinara', 'Ranch',
              'Cinnastix™', 'Brownies', 'Cookies', 'Choc Cookies',
              'Coke', 'Diet Coke', 'Sprite', 'Dr Pepper', 'Mtn Dew', 'Orange Soda', 'Grape Soda']
     order = []
@@ -24,7 +25,6 @@ def add_extras(pickup, p_size, p_base, your_pizza):
     def done_adding():
         next_btn['state'] = NORMAL
         yes_btn['state'] = DISABLED
-        no_btn['state'] = DISABLED
         last_ask_btn['state'] = DISABLED
 
     def ask_done():
@@ -38,11 +38,11 @@ def add_extras(pickup, p_size, p_base, your_pizza):
                                  font='Helvetica 14 bold')
         ask_done_label['width'] = 60
         global yes_btn
-        global no_btn
         global last_ask_btn
         answer_frame = MyFrame(ask_done_frame, row=1, col=0)
         yes_btn = MyButton(answer_frame, 'Yes', row=0, col=0, command=done_adding)
-        no_btn = MyButton(answer_frame, 'No', row=0, col=2, command=ask_side)
+        no_btn = MyButton(answer_frame, 'No', row=0, col=2)
+        no_btn['state'] = DISABLED
         last_ask_btn = MyButton(answer_frame, 'Back', row=0, col=1, command=lambda: last_ask(frame))
 
     def done(current):
@@ -68,8 +68,7 @@ def add_extras(pickup, p_size, p_base, your_pizza):
         extras_window.focus_force()
         if added is True:
             order.append(item)
-        # return order  # is this line needed?
-        print(order)
+        return order
 
 
     def last_ask(current):
@@ -88,7 +87,7 @@ def add_extras(pickup, p_size, p_base, your_pizza):
 
     def add_drink():
         ask_drink_frame.destroy()
-        extras_window.geometry('860x239')
+        extras_window.geometry('860x214')
         # add_drink
         global add_drink_frame
         global coke
@@ -253,7 +252,7 @@ def add_extras(pickup, p_size, p_base, your_pizza):
 
         dipping_images_frame = MyFrame(add_dipping_frame, row=1, col=0)
 
-        cheesy_jalapeno_frame = MyLabelFrame(dipping_images_frame, 'Cheesy Jalapeno', row=0, col=0,
+        cheesy_jalapeno_frame = MyLabelFrame(dipping_images_frame, 'Cheese', row=0, col=0,
                                              font='Helvetica 14 bold', padx=20)
         cheesy_jalapeno_image = MyLabel(cheesy_jalapeno_frame, '', row=0, col=0, img=cheesy_jalapeno)
         add_cheesy_jalapeno = MyButton(dipping_images_frame, 'Add to Order', row=1, col=0,
@@ -371,12 +370,15 @@ def add_extras(pickup, p_size, p_base, your_pizza):
         p_base = IntVar()  # resent p_base as a tkinter variable (instead of an integer, so it can be reset below)
         p_base.set(0)  # reset 'base' variable (avoid weird behavior)
         your_pizza = None  # reset 'your_pizza' variable (avoid weird behavior)
+        custom = False
+        changes = None
+        order = []
         extras_window.destroy()  # destroy 'extras' window
 
     # 'next' button function
     def next_payment():
         extras_window.destroy()  # destroy 'base_window' window
-        # extras.add_extras(pickup, p_size, p_base, ingredients)  # passes variables to the next module (to add extras)
+        payment.pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, order)
 
     ask_side()
 

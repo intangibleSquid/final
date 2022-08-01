@@ -321,6 +321,50 @@ class MyCheck(Checkbutton):
                   columnspan=colspan,
                   sticky=sticky)
 
+
+# textbox class
+class MyText(Text):
+    """Custom syntax for creating a tkinter Textarea.
+
+    Expected Positional Arguments:
+        1. Textarea's Parent Window / Frame
+            parent: str = root
+
+    Expected Keyword Arguments:
+        height= Textarea's Height
+            height: int = 0
+        width= Textarea's Width
+            width: int = 0
+        row= Textarea's Grid Row
+            row: int = 0
+        col= Textarea's Grid Column
+            col: int = 0
+
+    Optional Keyword Arguments:
+        rowspan= Textarea's Grid Rowspan
+            rowspan: int = 1
+        colspan= Textarea's Grid Columnspan
+            colspan: int = 1
+        sticky= Textarea's Grid Sticky Option
+            sticky: str = N+S+W+E
+        state= Textarea's State
+            state: keyword = NORMAL
+
+    Examples:
+        t = MyText(root, height=10, width=100, row=0, col=0)
+        t = MyText(root, height=5, width=500, row=1, col=0, state=DISABLED)
+    """
+    def __init__(self, parent, *, height, width, row, col, rowspan=1, colspan=1, sticky=None, state=NORMAL):
+        Text.__init__(self, parent)
+        self['height'] = height
+        self['width'] = width
+        self['state'] = state
+        self.grid(row=row,
+                  column=col,
+                  rowspan=rowspan,
+                  columnspan=colspan,
+                  sticky=sticky)
+
 '''
 TO DO:
 - [ ] look into window icons (mac specific) [error changing mac window icons]
