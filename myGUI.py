@@ -4,8 +4,7 @@ Integrated tkinter's Grid Geometry manager into most widgets for a one-line widg
 Only used the most frequently called attributes, others can be edited individually in the modules.
 """
 # import modules
-from tkinter import *
-# from tkinter import messagebox as mb
+from tkinter import *  # import tkinter
 
 
 # window class
@@ -365,10 +364,46 @@ class MyText(Text):
                   columnspan=colspan,
                   sticky=sticky)
 
-'''
-TO DO:
-- [ ] look into window icons (mac specific) [error changing mac window icons]
-- [ ] use logic checking to use window icons across all os / platforms
-- [ ] look into images in tkinter (no PIL / external libraries)
-- [ ] finish tkinter messagebox customizations (if needed)
-'''
+
+# entry widget class
+class MyEntry(Entry):
+    """Custom syntax for creating a tkinter Entry widget.
+
+    Expected Positional Arguments:
+        1. Entry Widgets's Parent Window / Frame
+            parent: str = root
+
+    Expected Keyword Arguments:
+        var= Entry Widget's Textvariable
+            var: str = tkvar
+        width= Entry Widgets's Width
+            width: int = 0
+        row= Entry Widgets's Grid Row
+            row: int = 0
+        col= Entry Widgets's Grid Column
+            col: int = 0
+
+    Optional Keyword Arguments:
+        rowspan= Entry Widgets's Grid Rowspan
+            rowspan: int = 1
+        colspan= Entry Widgets's Grid Columnspan
+            colspan: int = 1
+        sticky= Entry Widgets's Grid Sticky Option
+            sticky: str = N+S+W+E
+        state= Entry Widgets's State
+            state: keyword = NORMAL
+
+    Examples:
+        e = MyEntry(root, var=tkStringVar, width=100, row=0, col=0)
+        e = MyEntry(root, var=tkStringVar, width=100, row=0, col=1, state=DISABLED)
+    """
+    def __init__(self, parent, *, var, width, row, col, rowspan=1, colspan=1, sticky=None, state=NORMAL):
+        Entry.__init__(self, parent)
+        self['textvariable'] = var
+        self['width'] = width
+        self['state'] = state
+        self.grid(row=row,
+                  column=col,
+                  rowspan=rowspan,
+                  columnspan=colspan,
+                  sticky=sticky)

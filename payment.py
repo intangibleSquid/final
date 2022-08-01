@@ -17,7 +17,7 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
 
     # create new toplevel tkinter window
     global payment_window  # make 'payment_window' object global
-    payment_window = NewWindow("Review Your Order", '1000x460')  # create the 'review order' window
+    payment_window = NewWindow("Review Your Order", '1000x560')  # create the 'review order' window
 
     # define a function to process input variables ('in' prefix for 'incoming')
     def process_input(in_pickup, in_p_size, in_p_base, in_your_pizza, in_custom, in_changes, in_extra):
@@ -989,6 +989,7 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
             # order total cost text
             order_total_cost_text['state'] = NORMAL  # set 'order_total_cost_text' state to normal
             order_total = sub_final + taxes_final  # calculate the order total cost
+            global order_final  # make order_final global
             order_final = round(order_total, 2)  # round the order total cost
             order_total_cost_text.insert(0.0, '$%0.2f' % order_final)  # insert order total cost text
             order_total_cost_text['state'] = DISABLED  # set 'order_total_cost_text' state to disabled
@@ -1016,15 +1017,15 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
         p_base = IntVar()  # reset p_base as a tkinter variable (instead of an integer, so it can be reset below)
         p_base.set(0)  # reset 'base' variable (avoid weird behavior)
         your_pizza = None  # reset 'your_pizza' variable (avoid weird behavior)
-        custom = False  # reset 'custom' variable
-        changes = None  # reset 'changes' list
+        custom = False  # reset 'custom' variable (avoid weird behavior)
+        changes = None  # reset 'changes' list (avoid weird behavior)
         payment_window.destroy()  # destroy this window
 
     # 'next' button function
     def next_final():
         """Loads the next module and destroys the current window (also passes variables on to the next module)"""
         payment_window.destroy()  # destroy this window
-        # payment.pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, order)
+        final.finalize_order(pickup_value, order_final)  # load the next module
 
     # program navigation
     nav_frame = MyFrame(payment_window, row=3, col=0, colspan=5, sticky=N+S)  # navigation frame
