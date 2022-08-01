@@ -376,8 +376,6 @@ class MyEntry(Entry):
     Expected Keyword Arguments:
         var= Entry Widget's Textvariable
             var: str = tkvar
-        width= Entry Widgets's Width
-            width: int = 0
         row= Entry Widgets's Grid Row
             row: int = 0
         col= Entry Widgets's Grid Column
@@ -392,12 +390,14 @@ class MyEntry(Entry):
             sticky: str = N+S+W+E
         state= Entry Widgets's State
             state: keyword = NORMAL
+        width= Entry Widgets's Width
+            width: int = 0
 
     Examples:
         e = MyEntry(root, var=tkStringVar, width=100, row=0, col=0)
         e = MyEntry(root, var=tkStringVar, width=100, row=0, col=1, state=DISABLED)
     """
-    def __init__(self, parent, *, var, width, row, col, rowspan=1, colspan=1, sticky=None, state=NORMAL):
+    def __init__(self, parent, *, var, row, col, rowspan=1, colspan=1, sticky=None, state=NORMAL, width=None):
         Entry.__init__(self, parent)
         self['textvariable'] = var
         self['width'] = width
