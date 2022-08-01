@@ -5,9 +5,9 @@ Description: This is the main module for the Peter's Pizza Palace - Priority ord
 logo and gives the user the option to select between 'Delivery' or 'Carry-Out' for their order.
 """
 # import statements
-from myGUI import *
-import size
-from PIL import ImageTk, Image
+from myGUI import *  # import my custom tkinter syntax
+import size  # import next module (for next button)
+from PIL import ImageTk, Image  # pip -install Pillow dependency (PIL)
 
 
 # main function
@@ -36,6 +36,7 @@ def main():
 
     # 'start order' button's function
     def start_order():
+        """Starts the pizza ordering process"""
         size.pizza_size(pickup)  # opens the 'pizza_size' window (size.py) (passes pickup to it)
     start_order = MyButton(nav_frame, "Start Order", row=0, col=0, command=start_order)  # 'start order' button
 
@@ -43,7 +44,7 @@ def main():
     def exit_prog():
         """closes the program when button is clicked"""
         root.quit()  # close the root GUI window
-    close_root = MyButton(nav_frame, "Exit Program", row=0, col=1, command=exit_prog)
+    close_root = MyButton(nav_frame, "Exit Program", row=0, col=1, command=exit_prog)  # close button
 
     # main GUI loop
     root.mainloop()
@@ -52,4 +53,3 @@ def main():
 # main loop
 if __name__ == '__main__':
     main()
-

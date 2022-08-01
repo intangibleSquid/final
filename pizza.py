@@ -5,10 +5,10 @@ Description: This is the pizza module for the Peter's Pizza Palace - Priority or
 user to customize their pizza order as well as selecting from a number of pre-made pizzas.
 """
 # import statements
-import base
-import extras
-from myGUI import *
-from PIL import ImageTk, Image
+import base  # import previous module (for back button)
+import extras  # import next module (for next button)
+from myGUI import *  # import my custom tkinter syntax
+from PIL import ImageTk, Image  # pip -install Pillow dependency (PIL)
 
 
 # define 'customize_pizza' function (to create new 'customize_pizza' window)
@@ -16,7 +16,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
     """function to create a new window (pizza customization window)"""
     # create toplevel window
     pizza_window = NewWindow("Create Your Masterpie-zza™", '675x482')
-    pizza_window.focus_force()
+    pizza_window.focus_force()  # force focus on pizza_window
 
     # store image_paths
     # crust
@@ -120,6 +120,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
     seasoning = [seasoning1, seasoning2, seasoning3]  # seasoning variables list (check buttons) (for iteration)
 
     def generate_ingredients(p_base):
+        """Generates ingredient list from the pizza base"""
         global your_p_name  # global 'pizza name' variable (for labels outside of function)
         if ingredients is None:
             # build ingredient_list from p_base template selection
@@ -150,6 +151,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
     ingredients = generate_ingredients(p_base)
 
     def set_selection(ingredient_list):
+        """Sets the selected buttons based on the ingredient list"""
         # set check / radio buttons based on ingredient_list (and build image_path list from ingredient_list)
         for ingredient in ingredient_list:  # iterate through ingredient and image_path in ingredient_list
             for item in crusts.items():  # check if ingredient is in crusts
@@ -190,6 +192,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
                     seasoning[int(item[0]) - 1].set(1)  # when ingredient is found, set radio / check button's value
 
     def get_image_list(ingredient_list):
+        """Creates the image_path list to build the pizza image"""
         images = []  # initialize image_path list to build pizza_image
         for image_path in ingredient_list:
             images.append(image_path[1])  # add ingredient's image_path to images list
@@ -202,6 +205,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
     image_list = get_image_list(ingredients)
 
     def create_image(images):
+        """Builds pizza image from the image_path list"""
         # create pizza_image from images (image_path list)
         index = 0  # sentinel value (loop control variable and images list index)
         intermediate = Image.open(images[index])  # open the first image in the images list
@@ -223,8 +227,9 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
                               img=pizza_image)  # pizza_image (displayed with a label)
 
     def update_seasoning(value):  # seasoning only
-        global pizza_image
-        global custom
+        """Updates a seasoning from a check box toggle"""
+        global pizza_image  # make pizza_image global
+        global custom  # make custom global
         # update ingredients_list
         item = seasonings[value]
         # check if topping already exists (logic is reversed because value updates when clicked)
@@ -246,6 +251,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
         custom = True
 
     def update_topping(value):  # toppings only
+        """Updates a topping from a check box toggle"""
         global pizza_image
         global custom
         # update ingredients_list
@@ -269,6 +275,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
         custom = True
 
     def update_meat(value):  # meats only
+        """Updates a meat from a check box toggle"""
         global pizza_image
         global custom
         # update ingredients_list
@@ -292,6 +299,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
         custom = True
 
     def update_cheese(value):  # cheese only
+        """Updates cheese from a check box toggle"""
         global pizza_image
         # update ingredients_list
         item = cheeses[value]
@@ -308,6 +316,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
         pizza_img_label = MyLabel(pizza_img_frame, '', row=0, col=0, img=pizza_image)  # updated pizza_image
 
     def update_sauce(value):  # sauces only
+        """Updates sauce from a radio button press"""
         global pizza_image
         # update ingredients_list
         ingredients[1] = sauces[value]  # replace crust with updated selection
@@ -319,6 +328,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
 
     # crust
     def update_crust(value):  # crusts only
+        """Updates crust from a radio button press"""
         global pizza_image
         # update ingredients_list
         ingredients[0] = crusts[value]  # replace crust with updated selection
@@ -410,11 +420,13 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
 
     # 'back' button function
     def back_pizza():
-        base.pizza_base(pickup, p_size)
-        pizza_window.destroy()
+        """Loads the previous module and destroys the current window (also passes variables on to the that module)"""
+        base.pizza_base(pickup, p_size)  # go back to previous module
+        pizza_window.destroy()  # destroy this window
 
     # 'exit' button function
     def exit_pizza():
+        """Exits the current window and resets variables"""
         p_size.set(0)  # reset 'size' variable (avoid weird behavior)
         p_base = IntVar()  # resent p_base as a tkinter variable (instead of an integer, so it can be reset below)
         p_base.set(0)  # reset 'base' variable (avoid weird behavior)
@@ -422,6 +434,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
 
     # 'next' button function
     def next_extras():
+        """Loads the next module and destroys the current window (also passes variables on to the next module)"""
         pizza_window.destroy()  # destroy 'base_window' window
         if custom is True:
             extras.add_extras(pickup, p_size, p_base, ingredients, custom, changes)  # passes variables to the next module (to add extras)
@@ -429,58 +442,7 @@ def customize_pizza(pickup, p_size, p_base, ingredients=None):
             extras.add_extras(pickup, p_size, p_base, ingredients)  # passes variables to the next module (to add extras)
 
     # program navigation
-    nav_frame = MyFrame(pizza_window, row=5, col=0, colspan=4, sticky=N+S)
-    back_btn = MyButton(nav_frame, '<< Back', row=0, col=0, command=back_pizza)
-    exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_pizza)
-    next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_extras)
-
-    # pass on all variables
-
-    '''
-    TO DO:
-    # better documentation on this and all other modules
-    # fix update functions values (value -1 on some not all)
-    # + custom if edited ingred
-    # line up GUI and fix interfaces
-    # define functions and buttons to fix interfaces
-    
-    # not quite proper logic but correct bulding
-    # SO FIX LOGIC, FORMATTING / READABILITY and checkbox interactions
-    # img_label = MyLabel(ingredients_frame, '', row=0, col=2, img=p_final)
-
-    # set_buttons(your_pizza)
-    # command for live pizza refreshing
-    # documentation
-    # final modules and final steps
-    # custom label when you click a button (+ custom)
-    # pass other variables through to next function
-    # ingredients list and image generator as functions?
-    # create functions and call them in proper places
-    # add label above (window title = label) (above pizza name header: create your custom pizza or something tool)
-
-    # GO BACK THRU AND DOCUMENT ALL MODULES AND LINES CHECK FOR ERRORS AND TYPOS
-    # extra or half options?
-    # alt text / labels and non-viusual representation
-    # text area or label with ingredients list?
-    # refresh_btn = MyButton(ingredients_frame, 'Refresh', row=6, col=0, colspan=4, command=refresh_za)
-    # buttons and navigation?
-    '''
-
-    '''
-    Examples / TODO:
-    
-        def refresh_za():
-        return
-    
-    # need function to set button on/off values based on base pizza selection
-    def set_buttons(options):
-
-
-    # radio button 'live refresh' function (as values change, refresh in realtime)
-    def refresh_radio():
-        return
-
-    # check button 'live refresh' function (as values change, refresh in realtime)
-    def refresh_check():
-        return
-    '''
+    nav_frame = MyFrame(pizza_window, row=5, col=0, colspan=4, sticky=N+S)  # navigation frame
+    back_btn = MyButton(nav_frame, '<< Back', row=0, col=0, command=back_pizza)  # back button
+    exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_pizza)  # exit button
+    next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_extras)  # next button

@@ -5,8 +5,8 @@ Description: This is the size module for the Peter's Pizza Palace - Priority ord
 user to select the size of their pizza in a new pop-up Toplevel window.
 """
 # import statements
-from myGUI import *
-import base
+from myGUI import *  # import my custom tkinter syntax
+import base  # import next module (for next button)
 
 
 # define 'pizza_size' function (to create a new 'pizza_size' window)
@@ -34,15 +34,17 @@ def pizza_size(pickup):
 
     # 'exit' button function
     def exit_size():
+        """Exits the current window and resets variables"""
         p_size.set(0)  # reset 'size' variable (avoid weird behavior)
         size_window.destroy()  # destroy 'size_window' window
 
     # 'next' button function
     def next_base():
+        """Loads the next module and destroys the current window (also passes variables on to the next module"""
         size_window.destroy()  # destroy 'size_window' window
         base.pizza_base(pickup, p_size)  # opens the 'pizza_base' window (base.py) (passing variables to it)
 
     back_btn = MyButton(nav_frame, '<< Back', row=0, col=0)
     back_btn['state'] = DISABLED  # disabled back button (there's nothing before this window) [also no command]
-    exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_size)
-    next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_base)
+    exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_size)  # exit button
+    next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_base)  # next button

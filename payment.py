@@ -1002,6 +1002,7 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
     # navigation functions
     # 'back' button function
     def back_payment():
+        """Loads the previous module and destroys the current window (also passes variables on to the that module)"""
         payment_window.destroy()  # destroy this window
         if custom_value is True:  # customized pizza
             extras.add_extras(pickup, p_size, p_base, your_pizza, custom, changes)  # passes variables to last module
@@ -1010,6 +1011,7 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
 
     # 'exit' button function
     def exit_payment():
+        """Exits the current window and resets variables"""
         p_size.set(0)  # reset 'size' variable (avoid weird behavior)
         p_base = IntVar()  # reset p_base as a tkinter variable (instead of an integer, so it can be reset below)
         p_base.set(0)  # reset 'base' variable (avoid weird behavior)
@@ -1020,6 +1022,7 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
 
     # 'next' button function
     def next_final():
+        """Loads the next module and destroys the current window (also passes variables on to the next module)"""
         payment_window.destroy()  # destroy this window
         # payment.pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, order)
 
@@ -1029,22 +1032,3 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
     back_btn = MyButton(nav_frame, '<< Back', row=0, col=0, command=back_payment)  # back button
     exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_payment)  # exit button
     next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_final)  # next button
-
-
-'''
-# documentation
-# button spacing and window size
-# icons on mb windows
-
-# when complete return original window and swap frames to 'thank you for your order!...'
-# also go back through other modules and add prices to everything based on algorithm
-# features to add eventually:
-# update readme
-# add costs to items
-# cheese custom?
-# document, document, document
-# window title
-# make functions and structure code
-second or multiple pizza order options
-quantity for side items / cart module
-'''
