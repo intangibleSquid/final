@@ -17,7 +17,7 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
 
     # create new toplevel tkinter window
     global payment_window  # make 'payment_window' object global
-    payment_window = NewWindow("Review Your Order", '1000x480')  # create the 'review order' window
+    payment_window = NewWindow("Review Your Order", '1000x460')  # create the 'review order' window
 
     # define a function to process input variables ('in' prefix for 'incoming')
     def process_input(in_pickup, in_p_size, in_p_base, in_your_pizza, in_custom, in_changes, in_extra):
@@ -999,69 +999,43 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
     # generate order total receipt
     generate_order_total_receipt()
 
-'''
     # navigation functions
     # 'back' button function
     def back_payment():
-        payment_window.destroy()
-        if custom is True:
-            extras_mod.add_extras(pickup, p_size, p_base, your_pizza, custom, changes)  # passes variables to the next module (to add extras)
-        else:
-            extras_mod.add_extras(pickup, p_size, p_base, your_pizza)
+        payment_window.destroy()  # destroy this window
+        if custom_value is True:  # customized pizza
+            extras.add_extras(pickup, p_size, p_base, your_pizza, custom, changes)  # passes variables to last module
+        else:  # base pizza (not customized)
+            extras.add_extras(pickup, p_size, p_base, your_pizza)  # passes variables to last module
 
     # 'exit' button function
     def exit_payment():
         p_size.set(0)  # reset 'size' variable (avoid weird behavior)
-        p_base = IntVar()  # resent p_base as a tkinter variable (instead of an integer, so it can be reset below)
+        p_base = IntVar()  # reset p_base as a tkinter variable (instead of an integer, so it can be reset below)
         p_base.set(0)  # reset 'base' variable (avoid weird behavior)
         your_pizza = None  # reset 'your_pizza' variable (avoid weird behavior)
-        custom = False
-        changes = None
-        payment_window.destroy()  # destroy 'extras' window
+        custom = False  # reset 'custom' variable
+        changes = None  # reset 'changes' list
+        payment_window.destroy()  # destroy this window
 
     # 'next' button function
     def next_final():
-        payment_window.destroy()  # destroy 'base_window' window
+        payment_window.destroy()  # destroy this window
         # payment.pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, order)
 
     # program navigation
-    nav_frame = MyFrame(payment_window, row=3, col=0, colspan=4, sticky=N+S)
-    nav_frame.grid(pady=(40, 0))
-    back_btn = MyButton(nav_frame, '<< Back', row=0, col=0, command=back_payment)
-    exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_payment)
-    next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_final)
+    nav_frame = MyFrame(payment_window, row=3, col=0, colspan=5, sticky=N+S)  # navigation frame
+    nav_frame.grid(pady=(40, 0))  # padding on navigation frame (40px top)
+    back_btn = MyButton(nav_frame, '<< Back', row=0, col=0, command=back_payment)  # back button
+    exit_btn = MyButton(nav_frame, 'EXIT', row=0, col=1, command=exit_payment)  # exit button
+    next_btn = MyButton(nav_frame, 'Next >>', row=0, col=2, command=next_final)  # next button
 
-
-    # documentation
-    # github update (after cleaning up this module)
-    # button spacing and window size
-
-
-
-    # totals at the bottom? (or add totals into final receipt with adding all categories)
-
-    # taxes and final receipt window
-
-    # change original algorith to get pizza prive before extras (or remove althogether and generate here, make sure
-    # there are no assets I'm not using, clean all modules and this code too)
-
-
-    # total
-    # base cost
-    # meat cost
-    # topping cost
-    # seasoning cost
-    # total cost
-    # net cost section (above). total cost (one line total, below) actually just use space for the final line
-
-    # FUNCTIONS!
-    # icons on mb windows
-
-    # CLEAN UP AND DOCUMENT CODE, FIX GLITCHES AND USE FUNCTIONS (mess with pizzas and find the bugs here, rewrite
-    # sections if necessary (use functions!)
 
 '''
-'''
+# documentation
+# button spacing and window size
+# icons on mb windows
+
 # when complete return original window and swap frames to 'thank you for your order!...'
 # also go back through other modules and add prices to everything based on algorithm
 # features to add eventually:
@@ -1073,56 +1047,4 @@ def pizza_payment(pickup, p_size, p_base, your_pizza, custom, changes, extra):
 # make functions and structure code
 second or multiple pizza order options
 quantity for side items / cart module
-'''
-
-'''
-WAS UNDER FIRST HALF OF DICTIONARIES
-extra_cost = 0.00
-    for item in extra:
-        price = extras[item]
-        extra_cost += price
-    print(f'extra cost {extra_cost}')
-
-    base_cost = bases[p_base] * sizes[int(p_size.get())] + extra_cost + pickups[int(pickup.get())]
-    pizza_base_price = bases[p_base] * sizes[int(p_size.get())] + pickups[int(pickup.get())]
-    print(f'base cost {base_cost}')
-    if changes is not None:
-        if changes['meats'] != 0:
-            meat_cost = int(changes['meats']) * 0.75
-        else:
-            meat_cost = 0.00
-        print(f' meat cost {meat_cost}')
-        if changes['toppings'] != 0:
-            top_cost = int(changes['toppings']) * 0.45
-        else:
-            top_cost = 0.00
-        print(f'top cost {top_cost}')
-        if changes['seasonings'] != 0:
-            season_cost = int(changes['seasonings']) * 0.25
-        else:
-            season_cost = 0.00
-        print(f'season cost {season_cost}')
-        changes_cost = meat_cost + top_cost + season_cost
-        print(f'changes cust {changes_cost}')
-        cost = base_cost + changes_cost
-        pizza_price = pizza_base_price + changes_cost
-    else:
-        cost = base_cost
-        pizza_price = pizza_base_price
-
-    print(f'cost {cost}')
-
-    # example p_base = int: 5
-    # example custom = dict: {'meats': 2, 'toppings': 2, 'seasonings': 1}
-    # example extra = list: ['Garlic Bread', 'Cheese', 'Marinara', 'Brownies', 'Cookies', 'Mtn Dew', 'Dr Pepper']
-    # example your_pizza = list: [('Hand Tossed', 'images/pizza/crust/hand.png'),
-    # ('Alfredo', 'images/pizza/sauce/alf.png'),
-    # ('Mozzarella', 'images/pizza/cheese/mozz.png'), ('Minced Garlic', 'images/pizza/seasoning/mg.png'),
-    # ('Spinach', 'images/pizza/toppings/spin.png'), ('Tomatoes', 'images/pizza/toppings/tom.png'),
-    # ('Chicken', 'images/pizza/meat/chick.png'), ('Parmesan', 'images/pizza/seasoning/pc.png'),
-    # ('Black Olives', 'images/pizza/toppings/bo.png'), ('Pineapples', 'images/pizza/toppings/pine.png'),
-    # ('BBQ Drizzle', 'images/pizza/seasoning/bbqd.png'), ('Bacon', 'images/pizza/meat/bac.png'),
-    # ('Sausage', 'images/pizza/meat/saus.png')]
-
-
 '''
