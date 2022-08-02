@@ -209,19 +209,6 @@ def finalize_order(pickup_selection, total_order_price):
             time_info.set(str(time_of_pickup))  # insert pickup time into field
             time_info_entry['state'] = DISABLED  # disable the field
 
-            # final nav function
-            # define final 'done' button function
-            def done_final():
-                """Wraps up the order with a popup window"""
-                end = mb.showinfo('Done', "Order Received!\n Thanks for choosing Peter's Pizza Palace!")  # final popup
-                if end == 'ok':  # if user clicked okay
-                    final_window.destroy()  # destroy this window
-
-            # final frame navigation
-            final_nav_frame = MyFrame(final_window, row=1, col=0, colspan=4, sticky=N+S)  # navigation frame
-            final_nav_frame.grid(pady=(10, 0))  # nav frame padding (15px top)
-            done_btn = MyButton(final_nav_frame, 'Complete Order', row=0, col=1, command=done_final)  # done button
-
     # define function to get delivery information
     def get_delivery_info(cc_info=None):
         """Function to collect the user's delivery information"""
